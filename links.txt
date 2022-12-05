@@ -8,3 +8,5 @@ Authorization code flow of Spotify app:
 https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
 (Use Authorization code + PKCE extension when scripting out oauth)
 
+Spotify oauth video:
+https://www.youtube.com/watch?v=1vR3m0HupGI
