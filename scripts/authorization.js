@@ -1,5 +1,5 @@
-// const redirectURI = "https://mattpott.github.io/343-f22-p2/index.html"
-const redirectURI = "http://127.0.0.1:5500/index.html";
+// const spotifyRedirectURI = "https://mattpott.github.io/343-f22-p2/index.html"
+const spotifyRedirectURI = "http://127.0.0.1:5500/index.html";
 
 const spotifyClientID = "0fda33fa1e274e3abebe40455206dbb0";
 const spotifyClientSecret = "73175ba3f83e417d92669a4ac6018474";
@@ -7,83 +7,47 @@ const spotifyAuthorizeURL = "https://accounts.spotify.com/authorize";
 let spotifyAccessToken;
 let spotifyRefreshToken;
 
-const geniusClientID = "MMil_jC5rx7rairCJbvwzG3Vz4Ej0ICyKvVkNiy_skdXd_hAdEMb37r5xmtwzu30";
-const geniusClientSecret = "70jUVuJYLUtvwIOdoc20F91kkkP82YWFBJ2hbz6O332l0N7FQ3jWoBrFSSznP2xyKVq79fSDGOUA65M5Ahhlig";
-const geniusAuthorizeURL = "https://api.genius.com/oauth/authorize";
-let geniusAccessToken;
-let geniusRefreshToken;
-
 /*
 Auth loop is as follows:
     1. Query Spotify using Client ID and Client Secret
     2. Route user to Spotify Authentication page
     3. User signs in, page gets rerouted to secondary page 
     where the Access and Refresh Tokens are scraped from the URL
-    4. Query Genius using Client ID and Client Secret
-    5. Route user to Genius Authentication page
-    6. User signs in, page gets rerouted to secondary page 
-    where the Access and Refresh Tokens are scraped from the URL
-    7. Using these Access Tokens, play the game
-    8. If an Access Token need to be refreshed, query the appropriate
-    API using the Refresh Token and refresh it.
+    4. Using Genius Client Access Token and retrieved Spotify token,
+    play the game
+    5. If the Spotify Access Token need to be refreshed, 
+    query the API using the Refresh Token to refresh it.
 */
+
 function onPageLoad() {
     // data must be encoded in URL from data recieved
     if (window.location.search.length > 0) {
-        // if the page has been routed for spotify
-        if (sessionStorage.get("routed_spotify") == true) {
-            handleRedirect("spotify");
-            sessionStorage.setItem("routed_spotify" == false);
-        }
-        // if the page has been routed for genius
-        if (sessionStorage.getItem("routed_genius") == true) {
-            handleRedirect("genius")
-            sessionStorage.setItem("routed_genius" == false);
-        }
+        handleRedirect();
     } else {
-        // no access token is present, so request one from the API
+        // no access token exists for spotify, so request one again
         spotifyAccessToken = localStorage.getItem("spotify_access_token");
         if (spotifyAccessToken == null) {
             requestSpotifyAuthorization();
-        }
-        geniusAccessToken = localStorage.getItem("genius_access_token");
-        if (geniusAccessToken == null) {
-            requestGeniusAuthorization();
         }
     }
 }
 
 function requestSpotifyAuthorization() {
-    const scope = "&scope=playlist-read-private playlist-read-collaborative user-library-read";
-    requestOAuth(spotifyAuthorizeURL, spotifyClientID, scope);
-    sessionStorage.setItem("routed_spotify", true);
-}
-
-function requestGeniusAuthorization() {
-    requestOAuth(geniusAuthorizeURL, geniusClientID, "");
-    sessionStorage.setItem("routed_genius", true);
-}
-
-function requestOAuth(url, clientID, scope) {
     // get permissions using my client ID and secret
-    let authURL = url;
-    authURL += "?client_id=" + clientID;
-    authURL += "&response_type=code";
-    authURL += "&redirect_uri=" + encodeURI(redirectURI);
-    authURL += "&show_dialog=true";
-    authURL += scope;
-    window.location.href = authURL; // Show associated authorization screen
+    let url = spotifyAuthorizeURL;
+    url += "?client_id=" + spotifyClientID;
+    url += "&response_type=code";
+    url += "&redirect_uri=" + encodeURI(spotifyRedirectURI);
+    url += "&show_dialog=true";
+    url += "&scope=playlist-read-private playlist-read-collaborative user-library-read";
+    window.location.href = url; // Show Spotify's authorization screen
 }
 
-function handleRedirect(router) {
+function handleRedirect() {
     let code = getCode();
-    if (router == "spotify") {
-        fetchSpotifyAccessToken(code);
-    } else if (router == "genius") {
-        fetchGeniusAccessToken(code);
-    }
+    fetchAccessToken(code);
     // removes the parameters from the url
-    window.history.pushState("", "", redirectURI);
+    window.history.pushState("", "", spotifyRedirectURI);
 }
 
 function getCode() {
@@ -91,24 +55,15 @@ function getCode() {
     const queryString = window.location.search;
     if (queryString.length > 0) {
         const urlParams = new URLSearchParams(queryString);
-        code = urlParams.get("code");
+        code = urlParams.get('code');
     }
     return code;
 }
 
-function fetchSpotifyAccessToken(code) {
+function fetchAccessToken(code) {
     let body = "grant_type=authorization_code";
     body += "&code=" + code;
-    body += "&redirect_uri=" + encodeURI(redirectURI);
-    body += "&client_id=" + spotifyClientID;
-    body += "&client_secret=" + spotifyClientSecret;
-    callAuthorizationApi(body);
-}
-
-function fetchGeniusAccessToken(code) {
-    let body = "grant_type=authorization_code";
-    body += "&code=" + code;
-    body += "&redirect_uri=" + encodeURI(redirectURI);
+    body += "&redirect_uri=" + encodeURI(spotifyRedirectURI);
     body += "&client_id=" + spotifyClientID;
     body += "&client_secret=" + spotifyClientSecret;
     callAuthorizationApi(body);
@@ -154,10 +109,9 @@ function callSpotifyAPI(url, method, body) {
         body: body,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + spotifyAccessToken
+            'Authorization': 'Bearer ' + accessToken
         }
     }).then(resp => checkStatus(resp));
-    // should be a general function? TODO
 }
 
 function checkStatus(resp) {
@@ -172,11 +126,11 @@ function checkStatus(resp) {
                 localStorage.setItem("spotify_refresh_token", spotifyRefreshToken);
             }
         });
-        // need to refresh access token
     } else if (resp.status == 401) {
+        // need to refresh access token
         refreshAccessToken();
-        // bad response, so alert and log problem
     } else {
+        // bad response, so alert and log problem
         console.log("Error response:", resp);
         alert("Bad status was received handling request:", resp);
     }
