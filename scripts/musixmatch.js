@@ -4,14 +4,14 @@ const musixKey = "6f134df877d21f6dede4f762d5c8940f";
 let lyricsCopyright;
 
 async function musixGetLines(isrc) {
-    const trackID = await getTrackID();
+    const trackID = await getTrackID(isrc);
     if (trackID == null) {
         return [];
     }
     return await getLyrics(trackID);
 }
 
-async function getTrackID() {
+async function getTrackID(isrc) {
     let musixURL = musixBaseURL;
     musixURL += "track.get?apikey=";
     musixURL += musixKey;
@@ -35,8 +35,8 @@ async function getLyrics(musixID) {
     const respJson = await (await fetch(musixURL)).json();
     lyrics = respJson.message.body.lyrics.lyrics_body;
     lyricsCopyright = respJson.message.body.lyrics.lyrics_copyright;
-    console.log('Lyrics', lyrics);
-    console.log('Copyright', lyricsCopyright);
+    // console.log('Lyrics', lyrics);
+    // console.log('Copyright', lyricsCopyright);
     const copyrightFooter = document.querySelector('#copyright-footer');
     copyrightFooter.textContent = lyricsCopyright;
     return lyricsHandler(lyrics);

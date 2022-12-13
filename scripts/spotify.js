@@ -2,8 +2,7 @@ const spotifyBaseURI = "https://api.spotify.com/v1";
 
 async function getUserID() {
     const resp = await callSpotifyGET (spotifyBaseURI + "/me");
-    console.log(resp);
-    return resp;
+    return resp.id;
 }
 
 async function callSpotifyGET(url) {
@@ -16,13 +15,11 @@ async function callSpotifyGET(url) {
     });
     if (resp.status == 200) {
         // all good, so return received data as json
-        console.log("AOK");
         return await resp.json();
     } else if (resp.status == 401) {
         // need to refresh access token
         refreshAccessToken();
         // access token refreshed, so make call again
-        console.log("Refresh");
         return callSpotifyGET(url);
     } else {
         // bad response, so alert and log problem
