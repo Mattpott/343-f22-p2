@@ -1,11 +1,13 @@
-// const spotifyRedirectURI = "https://mattpott.github.io/343-f22-p2/index.html"
-const spotifyRedirectURI = "http://127.0.0.1:5500/index.html";
+const spotifyRedirectURI = "https://mattpott.github.io/343-f22-p2/index.html"
+// const spotifyRedirectURI = "http://127.0.0.1:5500/index.html";
 
 const spotifyClientID = "0fda33fa1e274e3abebe40455206dbb0";
 const spotifyClientSecret = "73175ba3f83e417d92669a4ac6018474";
 const spotifyAuthorizeURL = "https://accounts.spotify.com/authorize";
 let spotifyAccessToken;
 let spotifyRefreshToken;
+
+window.onload = onPageLoad;
 
 /*
 Auth loop is as follows:
@@ -19,15 +21,17 @@ Auth loop is as follows:
     query the API using the Refresh Token to refresh it.
 */
 
-function onPageLoad() {
-    // data must be encoded in URL from data recieved
+async function onPageLoad() {
+    // data is encoded in URL, so this occurs on redirect during authentication
     if (window.location.search.length > 0) {
         handleRedirect();
     } else {
+        // handles before authentication runs
         // no access token exists for spotify, so request one again
         spotifyAccessToken = localStorage.getItem("spotify_access_token");
         if (spotifyAccessToken == null) {
             requestSpotifyAuthorization();
+            return;
         }
     }
 }
@@ -83,9 +87,8 @@ function callAuthorizationApi(body) {
 }
 
 function handleAuthResponse(resp) {
-    // all good
-    console.log("status", resp.status);
     if (resp.status == 200) {
+        // all good
         resp.json().then(respJson => {
             if (respJson.access_token != undefined) {
                 spotifyAccessToken = respJson.access_token;
@@ -96,39 +99,6 @@ function handleAuthResponse(resp) {
                 localStorage.setItem("spotify_refresh_token", spotifyRefreshToken);
             }
         });
-        // bad response, so alert and log problem
-    } else {
-        console.log("Error response:", resp);
-        alert("Bad status was received handling request:", resp);
-    }
-}
-
-function callSpotifyAPI(url, method, body) {
-    fetch(url, {
-        method: method,
-        body: body,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + accessToken
-        }
-    }).then(resp => checkStatus(resp));
-}
-
-function checkStatus(resp) {
-    // all good
-    console.log("status", resp.status);
-    if (resp.status == 200) {
-        resp.json().then(respJson => {
-            if (respJson.access_token != undefined) {
-                spotifyAccessToken = respJson.access_token;
-                localStorage.setItem("spotify_access_token", spotifyAccessToken);
-                spotifyRefreshToken = respJson.refresh_token;
-                localStorage.setItem("spotify_refresh_token", spotifyRefreshToken);
-            }
-        });
-    } else if (resp.status == 401) {
-        // need to refresh access token
-        refreshAccessToken();
     } else {
         // bad response, so alert and log problem
         console.log("Error response:", resp);

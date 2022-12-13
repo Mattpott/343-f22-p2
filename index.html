@@ -7,16 +7,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guess Off Lyrics</title>
 
-  <script src="scripts/authorization.js"></script>
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <script type="text/javascript" src="scripts/authorization.js"></script>
+  <script type="text/javascript" src="scripts/spotify.js"></script>
+  <script type="text/javascript" src="scripts/game.js"></script>
+  <!-- <script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"></script> -->
 </head>
 
-<body onload="onPageLoad()">
+<body>
   <h1>
     Guess Off Lyrics
   </h1>
   <div id="lyric-container">
-   
+
+
   </div>
+
+  <label for="play-button">Play Button</label>
+  <input type="button" onclick="startGame()" value="Play">
+
+  <div id="copyright-footer">
+
+  </div>
+
+  <!-- For MusixMatch -->
+  <!-- <script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"></script> -->
 </body>
 
 </html>
