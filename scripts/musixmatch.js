@@ -18,6 +18,7 @@ async function getTrackID(isrc) {
     musixURL += "&track_isrc=";
     musixURL += isrc;
     const musixRespJson = await (await fetch(musixURL)).json();
+    // console.log('Musix Resp Json', musixRespJson);
     curHasLyrics = musixRespJson.message.body.track.has_lyrics;
     if (curHasLyrics == 0) {
         return null;
@@ -43,6 +44,9 @@ async function getLyrics(musixID) {
 }
 
 function lyricsHandler(lyrics) {
+    if (lyrics === "") {
+        return [];
+    }
     const lines = lyrics.split('\n');
     const endIndex = lines.indexOf('...');
     return lines.filter((line, index) => {
