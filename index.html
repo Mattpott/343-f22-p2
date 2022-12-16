@@ -8,33 +8,38 @@
   <title>Guess Off Lyrics</title>
 
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/selection-display.css">
+  <link rel="stylesheet" href="css/game.css">
+
+
   <script type="text/javascript" src="scripts/authorization.js"></script>
   <script type="text/javascript" src="scripts/spotify.js"></script>
   <script type="text/javascript" src="scripts/musixmatch.js"></script>
+  <script type="text/javascript" src="scripts/selectionDisplay.js"></script>
   <script type="text/javascript" src="scripts/game.js"></script>
   <!-- <script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"></script> -->
 </head>
 
 <body>
-  <h1>
-    Guess Off Lyrics
-  </h1>
-  
-  <input type="search" class="input-location">
-
-  <div id="play-button-container">
-    <button id="play-button" type="button" onclick="startGame()">
-      Play
-    </button>
+  <div id="top-header">
+    <h1>
+      Guess Off Lyrics
+    </h1>
   </div>
-
-  <div id="choice-container"></div>
-  <div id="lyric-container"></div>
-
-
-  <div id="selection-button-container"></div>
-
-  <div id="copyright-footer"></div>
+  
+  <main>
+    <div id="play-button-container">
+      <button id="play-button" type="button" onclick="displayInitialSelection()">
+        Play the Game
+      </button>
+    </div>
+  </main>
+  
+  <div id="footer">
+    <div id="copyright-footer"></div>
+  </div>
 
 </body>
 

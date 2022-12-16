@@ -19,6 +19,10 @@ async function getTrackID(isrc) {
     musixURL += isrc;
     const musixRespJson = await (await fetch(musixURL)).json();
     // console.log('Musix Resp Json', musixRespJson);
+    // no track was returned by this ISRC
+    if (!musixRespJson.message.body.track) {
+        return null;
+    }
     curHasLyrics = musixRespJson.message.body.track.has_lyrics;
     if (curHasLyrics == 0) {
         return null;

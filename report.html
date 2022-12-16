@@ -1,12 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Project 2 Report</title>
 </head>
+
 <body>
-  
+  <main>
+    <h1>Report</h1>
+    <ol>
+      <li><a href="https://mattpott.github.io/343-f22-p2/index.html">Website located here</a></li>
+      <li>
+        This app is a game wherein a player connects their Spotify account and gets presented with a list of their
+        playlists. They can then choose a playlist to either choose a song from it (if they wish to quiz a friend on a
+        specific song or something), or have one picked at random. Once a song is chosen, the game begins, and a blank
+        set of lines is shown on the screen. The player must then enter a number between 1 and the number of lines
+        shown. Doing so results in the specified lyric being revealed to the player. The player has a maximum of 5 lines
+        to have shown, and must make a guess as to what the song is based on those 5 or less lines
+      </li>
+      <li>This website is deployed to GitHub Pages at the link above</li>
+      <li>It is not yet responsive as I have yet to do the CSS for this Project</li>
+      <li>
+        I have satisfied this through the following:
+        <ol>
+          <li>Using Spotify's API to authenticate and allow a user to play</li>
+          <li>Using Spotify's API to retrieve the user's ID and playlists</li>
+          <li>Using Spotify's API to retrieve the songs in the selected playlist</li>
+          <li>Using MusixMatch's API to retrieve a MusixMatch ID through a song's ISRC value gotten from Spotify</li>
+          <li>Using MusixMatch's API to retrieve the first 30% of the lyrics of the song specified by that ID</li>
+        </ol>
+      </li>
+      <li>
+        I have satisfied the search requirement by allowing a user to search through their list of playlists, the songs
+        in a playlist, and the songs that can be answered in the game
+      </li>
+      <li>
+        I have satisfied the "displays results" requirement through the appearance of a list of possible answers when
+        searching for a song during the game
+      </li>
+      <li>
+        I have satisfied the filterable results requirement by having the list of playlist cards be filterable by a
+        search, as well as by having the list of songs in a playlist be filterable by a search
+      </li>
+    </ol>
+  </main>
 </body>
+
 </html>

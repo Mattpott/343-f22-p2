@@ -1,5 +1,5 @@
-// const spotifyRedirectURI = "https://mattpott.github.io/343-f22-p2/index.html"
-const spotifyRedirectURI = "http://127.0.0.1:5500/index.html";
+const spotifyRedirectURI = "https://mattpott.github.io/343-f22-p2/index.html"
+// const spotifyRedirectURI = "http://127.0.0.1:5500/index.html";
 
 const spotifyClientID = "0fda33fa1e274e3abebe40455206dbb0";
 const spotifyClientSecret = "73175ba3f83e417d92669a4ac6018474";
