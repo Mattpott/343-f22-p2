@@ -1,4 +1,4 @@
-const musixBaseURL = "https://api.musixmatch.com/ws/1.1/";
+const musixBaseURL = "https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/";
 const musixKey = "6f134df877d21f6dede4f762d5c8940f";
 
 let lyricsCopyright;
@@ -39,11 +39,11 @@ async function getLyrics(musixID) {
     let lyrics;
     const respJson = await (await fetch(musixURL)).json();
     lyrics = respJson.message.body.lyrics.lyrics_body;
-    lyricsCopyright = respJson.message.body.lyrics.lyrics_copyright;
+    // lyricsCopyright = respJson.message.body.lyrics.lyrics_copyright;
     // console.log('Lyrics', lyrics);
     // console.log('Copyright', lyricsCopyright);
-    const copyrightFooter = document.querySelector('#copyright-footer');
-    copyrightFooter.textContent = lyricsCopyright;
+    // const copyrightFooter = document.querySelector('#copyright-footer');
+    // copyrightFooter.append(lyricsCopyright);
     return lyricsHandler(lyrics);
 }
 

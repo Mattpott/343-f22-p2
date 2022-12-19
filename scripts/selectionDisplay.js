@@ -11,19 +11,18 @@ async function displayInitialSelection() {
 
 async function buildPossiblePlaylists() {
     const userID = await getUserID();
-    console.log('User ID:', userID);
+    // console.log('User ID:', userID);
     const playlistJson = await callSpotifyGET(`${spotifyBaseURI}/users/${userID}/playlists`);
-    console.log('Playlists:', playlistJson);
-    possiblePlaylists = playlistJson.items.filter((playlist) => {
-        return playlist.tracks.total > 0;
-    });
+    // console.log('Playlists:', playlistJson);
+    possiblePlaylists = playlistJson.items
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter((playlist) => playlist.tracks.total > 0);
 }
 
 function displayPlaylists(playlists) {
     setUpChoiceView();
     setFilterFunction(playlistFilter);
     // get the list of playlists, but filter out any empty ones
-    console.log('Playlist array:', playlists);
     const playlistNodeList = document.createElement('ul');
     playlistNodeList.classList.add('playlist-list');
     playlists.forEach(playlist => {
@@ -34,7 +33,10 @@ function displayPlaylists(playlists) {
         const playlistCard = document.createElement('li');
         playlistCard.classList.add('playlist-card');
         playlistCard.appendChild(imageNode);
-        playlistCard.append(playlist.name);
+        const playlistCardName = document.createElement('h3');
+        playlistCardName.className = 'playlist-card-name';
+        playlistCardName.append(playlist.name);
+        playlistCard.appendChild(playlistCardName);
         playlistCard.addEventListener('click', () => {
             selectedPlaylistID = playlistID;
             displayBackButton();
@@ -64,6 +66,7 @@ function setUpChoiceView() {
     const playListSearch = document.createElement('input');
     playListSearch.type = 'search';
     playListSearch.className = 'input-location';
+    playListSearch.placeholder = 'Filter...'
     main.appendChild(playListSearch);
     // add choice container
     choiceContainer = document.createElement('div');
@@ -81,7 +84,7 @@ function setFilterFunction(func) {
 function playlistFilter(ev) {
     const query = ev.target.value;
     const filteredPlaylists = possiblePlaylists.filter((playlist) => {
-        return playlist.name.toLowerCase().includes(query.toLowerCase())
+        return playlist.name.toLowerCase().includes(query.toLowerCase());
     });
     displayPlaylists(filteredPlaylists);
 }
@@ -90,7 +93,7 @@ function songListFilter(ev) {
     const query = ev.target.value;
     const filteredTracks = possibleTracks.filter((track) => {
         const trackArtists = track.artists.filter((artist) => {
-            artist.name.toLowerCase().includes(query.toLowerCase())
+            return artist.name.toLowerCase().includes(query.toLowerCase());
         });
         return track.name.toLowerCase().includes(query.toLowerCase()) || trackArtists.length !== 0;
     });
@@ -116,7 +119,9 @@ async function displayPlaylistSongs(playlistID) {
     const songsListJson = await callSpotifyGET(`${spotifyBaseURI}/playlists/${playlistID}/tracks`);
     const songsListArray = songsListJson.items;
     // get the track objects from that list
-    possibleTracks = songsListArray.map((song) => song.track);
+    possibleTracks = songsListArray
+        .map((song) => song.track)
+        .sort((a, b) => a.name.localeCompare(b.name));
     displayTracks(possibleTracks);
 }
 
@@ -142,26 +147,34 @@ async function displayTracks(tracks) {
         const trackNode = document.createElement('li');
         trackNode.classList.add('track-node');
         trackNode.appendChild(trackImage);
-        trackNode.append(track.name, trackArtists);
+        const trackNameNode = document.createElement('h3');
+        trackNameNode.className = 'track-node-name';
+        trackNameNode.append(track.name);
+        trackNode.appendChild(trackNameNode);
+        const trackArtistsNode = document.createElement('p');
+        trackArtistsNode.className = 'track-node-artists';
+        trackArtistsNode.append(trackArtists);
+        trackNode.appendChild(trackArtistsNode);
         trackNode.addEventListener('click', () => {
             // this node is the selected node, so deselect it
             if (trackNode.classList.contains('selected-track')) {
+                trackNode.classList.remove('selected-track');
                 // update the button
-                selectionButton.lastChild.replaceWith('Select A Random Song');
+                selectionButton.innerText = 'Select A Random Song';
                 selectionButton.onclick = playlistSelectionEvent;
+                return;
             }
-            // set this node to be the new selected track, 
+            // set the new node to be the new selected track, 
             // updating previously selected track to longer be such
             selectedTrack = track;
             const prevSelected = document.querySelector('.selected-track');
             if (prevSelected) {
                 prevSelected.classList.remove('selected-track');
-                return;
             }
             // add selected-track class to this node
             trackNode.classList.add('selected-track');
             // update the button
-            selectionButton.lastChild.replaceWith('Select This Song');
+            selectionButton.innerText = 'Select This Song';
             selectionButton.onclick = songSelectionEvent;
         });
         trackNodeList.appendChild(trackNode);

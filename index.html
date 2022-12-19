@@ -5,41 +5,78 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guess Off Lyrics</title>
+  <title>Lyric Guessr</title>
 
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="stylesheet" href="css/reset.css">
+  <!-- import fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+  </style>
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/selection-display.css">
   <link rel="stylesheet" href="css/game.css">
 
-
-  <script type="text/javascript" src="scripts/authorization.js"></script>
-  <script type="text/javascript" src="scripts/spotify.js"></script>
-  <script type="text/javascript" src="scripts/musixmatch.js"></script>
-  <script type="text/javascript" src="scripts/selectionDisplay.js"></script>
-  <script type="text/javascript" src="scripts/game.js"></script>
-  <!-- <script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"></script> -->
+  <script src="scripts/authorization.js"></script>
+  <script src="scripts/spotify.js"></script>
+  <script src="scripts/musixmatch.js"></script>
+  <script src="scripts/selectionDisplay.js"></script>
+  <script src="scripts/game.js"></script>
 </head>
 
 <body>
   <div id="top-header">
     <h1>
-      Guess Off Lyrics
+      Lyric Guessr
     </h1>
   </div>
-  
+
   <main>
+    <div id="before-play-container">
+      <h2>
+        Before You Play:
+      </h2>
+      <p>
+        In order to play this game, you must ensure that your Spotify account is whitelisted on my app.<br>
+        If this is not the case, please email me at
+        <a
+          href="mailto:pottermi@dukes.jmu.edu?subject=Lyric%20Game%20Spotify%20Access&body=Please%20give%20my%20account%20access%20at%20SPOTIFY-ACCOUNT-EMAIL-HERE">
+          pottermi@dukes.jmu.edu
+        </a>
+        with your Spotify Account email.
+      </p>
+      <p style="margin-top: 1rem;">
+        Furthermore, this game will not work without the use of a proxy server due to MusixMatch not including CORS
+        information in their headers. Due to the lack of working free proxies, this game relies on CORS anywhere by Rob
+        W in order to get lyrical information. However, this proxy requires an opt-in to function, so please go to
+        <a target="_blank" rel="noopener noreferrer" href="https://cors-anywhere.herokuapp.com/">
+          https://cors-anywhere.herokuapp.com/
+        </a> and click their button to opt-in to their demo before playing.
+      </p>
+    </div>
+
     <div id="play-button-container">
       <button id="play-button" type="button" onclick="displayInitialSelection()">
         Play the Game
       </button>
     </div>
   </main>
-  
-  <div id="footer">
-    <div id="copyright-footer"></div>
-  </div>
+
+  <footer>
+    <div id="copyright-footer">
+      Powered by:
+      <a href="https://www.spotify.com" target="_blank" rel="noopener noreferer">
+        <img class="logo" src="images/spotify-icons-logos/logos/Spotify_Logo_RGB_Green.png" alt="Spotify Logo">
+      </a>
+      and
+      <a href="https://www.musixmatch.com" target="_blank" rel="noopener noreferer">
+        <img class="logo" src="images/MusixMatch-Logo.png" alt="musixmatch logo">
+      </a>
+    </div>
+  </footer>
 
 </body>
 

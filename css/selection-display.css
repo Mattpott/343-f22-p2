@@ -1,43 +1,195 @@
-#back-button {
+/* Playlist display and song display container */
+@media screen and (min-width: 1000px) {
+    #choice-container {
+        width: 1000px;
+        height: 710px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        overflow: auto;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #choice-container {
+        width: 100vw;
+        height: 665px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        overflow: auto;
+    }
+}
+
+.input-location {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Beginning of playlist card area */
+
+@media screen and (min-width: 1000px) {
+    .playlist-list {
+        list-style: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 1rem;
+        row-gap: 1rem;
+        padding: 0;
+    }
+
+    .playlist-card {
+        display: grid;
+        grid-template-rows: 250px auto;
+        width: 250px;
+        height: 300px;
+        padding: 0.5rem;
+        box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.1);
+        transition: 0.3s;
+        border-radius: 10px;
+        /* 5px rounded corners */
+        padding: 0;
+    }
+
+    .playlist-card:hover {
+        box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .playlist-card>img {
+        justify-self: center;
+        align-self: center;
+        max-width: 240px;
+        max-height: 240px;
+        /* border-radius: 5px 5px 5px 5px; */
+    }
+
+    .playlist-card-name {
+        justify-self: center;
+        align-self: center;
+        /* done to offset the 5px margin of the card's image */
+        transform: translate(0, -5px);
+        font-weight: 500;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .playlist-list {
+        list-style: none;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .playlist-card {
+        display: grid;
+        height: 130px;
+        grid-template-columns: 125px 1fr;
+        align-items: center;
+        border: 1px solid rgb(136, 136, 136);
+    }
+
+    .playlist-card:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .playlist-card>img {
+        max-width: 125px;
+        max-height: 125px;
+        padding-left: 5px;
+    }
+
+    .playlist-card-name {
+        margin-left: 1.5rem;
+        margin-right: 1rem;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+/* Beginning of song selection area */
+
+@media screen and (min-width: 1000px) {
+    #back-button {
+        position: absolute;
+        padding-left: 20px;
+        padding-right: 20px;
+        transform: translateX(-300px);
+    }
+
+    #selection-button-container {
+        position: absolute;
+        transform: translate(-300px, 1rem);
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #back-button {
+        position: absolute;
+        padding-left: 20px;
+        padding-right: 20px;
+        transform: translateX(-150px);
+    }
     
+    #selection-button-container {
+        margin-bottom: 1rem;
+    }
 }
 
-#choice-container {
-
-}
-
-.playlist-list {
-
-}
-
-.playlist-card {
-
-}
-
-.playlist-card>img {
-
-}
-
-#selection-button-container {
-
-}
 
 .selection-button {
-
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .track-list {
-
+    list-style: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* In case want to display in same format as playlists */
+    /* display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    padding: 0; */
 }
 
 .track-node {
-
+    display: grid;
+    height: 130px;
+    grid-template-columns: 125px 1fr 1fr;
+    align-items: center;
+    border: 1px solid rgb(136, 136, 136);
 }
 
-.track>img {
+.track-node:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
 
+.track-node>img {
+    max-width: 125px;
+    max-height: 125px;
+    padding-left: 5px;
+}
+
+.track-node-name {
+    margin-left: 1.5rem;
+    margin-right: 1rem;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.track-node-artists {
+    overflow-x: auto;
+    margin-right: 2rem;
 }
 
 .selected-track {
-    
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.selected-track:hover {
+    background-color: rgba(255, 255, 255, 0.15);
 }

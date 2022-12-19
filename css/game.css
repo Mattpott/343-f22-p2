@@ -1,43 +1,67 @@
-#lyric-container {
+@media screen and (min-width: 1000px) {
+    #lyric-container {
+        width: 1000px;
+        height: 650px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        overflow: auto;
+    }
+
+    .lyrics-list {
+        list-style: decimal;
+        width: 100%;
+        height: 100%;
+        margin-left: 200px;
+        overflow-y: auto;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #lyric-container {
+        width: 100vw;
+        height: 625px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        overflow: auto;
+    }
     
-}
-
-.number-input-location {
-
-}
-
-.lyrics-list {
-
+    .lyrics-list {
+        list-style: decimal;
+        width: 100%;
+        height: 100%;
+        margin-left: 20px;
+        overflow-y: auto;
+    }
 }
 
 .lyrics-line {
-
-}
-
-#song-search-wrapper {
-
-}
-
-#song-search-input {
-
+    padding-left: 0.75rem;
 }
 
 #song-search-list {
-
+    max-height: 200px;
+    position: absolute;
+    inset: auto 0 100%;
+    z-index: 100;
+    overflow-y: auto;
 }
 
 .queried-song {
-
+    border: 1px solid rgb(136, 136, 136);
 }
 
 .queried-song:hover {
-
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 #result-screen-container {
     /* background-color: rgb(10, 10, 10, 0.75); */
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -46,6 +70,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: rgba(18, 18, 18, 0.5);
     z-index: 999;
     
 }
@@ -55,6 +80,6 @@
     text-align: center;
 }
 
-#result-screen-container>button {
+/* #result-screen-container>button {
 
-}
+} */

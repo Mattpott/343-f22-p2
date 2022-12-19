@@ -7,13 +7,18 @@ async function playlistSelectionEvent() {
     // set the selected track to a random one, 
     // ensuring the random track has enough displayable lyrics
     let trackISRC;
+    let ind = 0;
     do {
         selectedTrack = possibleTracks[Math.floor(Math.random() * possibleTracks.length)];
         trackISRC = selectedTrack.external_ids.isrc;
         selectedTrackLyrics = await musixGetLines(trackISRC);
+        ind++;
         // console.log('Selected Track Lyrics:', selectedTrackLyrics);
     }
-    while (selectedTrackLyrics.length < 9);
+    while (selectedTrackLyrics.length < 9 && ind < possibleTracks.length);
+    if (ind === possibleTracks.length) {
+        alert(`No playable songs in this playlist. \n${ind} requests were wasted.`);
+    }
     // play the lyric game
     play();
 }
@@ -65,17 +70,18 @@ function buildGameInputs() {
     const numberEntry = document.createElement('input');
     numberEntry.placeholder = 'Input Desired Line Number';
     numberEntry.type = 'number';
-    numberEntry.className = 'number-input-location';
+    numberEntry.className = 'input-location';
     numberEntry.addEventListener('change', (ev) => handleNumberEntry(ev));
 
     // song search
-    lyricContainer.insertBefore(numberEntry, lyricContainer.firstChild);
+    main.insertBefore(numberEntry, lyricContainer);
     const songSearchWrapper = document.createElement('div');
     songSearchWrapper.id = 'song-search-wrapper';
     const searchEntry = document.createElement('input');
     searchEntry.placeholder = 'Search for song here';
     searchEntry.type = 'text';
     searchEntry.id = 'song-search-input';
+    searchEntry.className = 'input-location';
     searchEntry.addEventListener('input', (ev) => handleSearchEntry(ev.target.value));
     searchEntry.addEventListener('focus', searchGainFocus);
     songSearchWrapper.addEventListener('focusout', (ev) => searchLoseFocus(ev));
@@ -127,7 +133,7 @@ function handleSearchEntry(query) {
     newSearchList.id = 'song-search-list';
     const queriedSongs = possibleTracks.filter((track) => {
         const trackArtists = track.artists.filter((artist) => {
-            artist.name.toLowerCase().includes(query.toLowerCase())
+            return artist.name.toLowerCase().includes(query.toLowerCase());
         });
         return track.name.toLowerCase().includes(query.toLowerCase()) || trackArtists.length !== 0;
     });
@@ -135,7 +141,7 @@ function handleSearchEntry(query) {
     const container = document.getElementById('song-search-wrapper');
     if (queriedSongs.length === 0) {
         if (!oldSearchList) {
-            container.appendChild(newSearchList);
+            container.insertBefore(newSearchList, container.lastChild);
         } else {
             oldSearchList.replaceWith(newSearchList);
         }
@@ -151,7 +157,7 @@ function handleSearchEntry(query) {
     });
     // update the visual
     if (!oldSearchList) {
-        container.appendChild(newSearchList);
+        container.insertBefore(newSearchList, container.lastChild);
     } else {
         oldSearchList.replaceWith(newSearchList);
     }
@@ -185,7 +191,7 @@ function handleSongSubmission(ev) {
     
     const result = document.createElement('p');
     result.append(`The Song Was:\n${selectedTrack.name}\n`);
-    console.log('Selected:', selectedTrack);
+    // console.log('Selected:', selectedTrack);
     if (selectedTrack.name.toLowerCase().includes(submittedTrackTitle.toLowerCase())) {
         result.append('You Got It Right!');
     } else {
