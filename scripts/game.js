@@ -81,7 +81,6 @@ function buildGameInputs() {
     searchEntry.placeholder = 'Search for song here';
     searchEntry.type = 'text';
     searchEntry.id = 'song-search-input';
-    searchEntry.className = 'input-location';
     searchEntry.addEventListener('input', (ev) => handleSearchEntry(ev.target.value));
     searchEntry.addEventListener('focus', searchGainFocus);
     songSearchWrapper.addEventListener('focusout', (ev) => searchLoseFocus(ev));
@@ -141,7 +140,7 @@ function handleSearchEntry(query) {
     const container = document.getElementById('song-search-wrapper');
     if (queriedSongs.length === 0) {
         if (!oldSearchList) {
-            container.insertBefore(newSearchList, container.lastChild);
+            container.appendChild(newSearchList);
         } else {
             oldSearchList.replaceWith(newSearchList);
         }
@@ -157,7 +156,7 @@ function handleSearchEntry(query) {
     });
     // update the visual
     if (!oldSearchList) {
-        container.insertBefore(newSearchList, container.lastChild);
+        container.appendChild(newSearchList);
     } else {
         oldSearchList.replaceWith(newSearchList);
     }
